@@ -34,3 +34,7 @@ security:
     secret: Ma+cOaNdrJ1ZO2uv5MZeP9vme9PvJWop2k4B4ijowso=
     issuer: BikeLak
     expiration: 3600
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
