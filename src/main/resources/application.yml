@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/bikelab
-    username: postgres
-    password: 2005
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://${PGHOST:localhost}:${PGPORT:5432}/${PGDATABASE:bikelab}}
+    username: ${SPRING_DATASOURCE_USERNAME:${PGUSER:postgres}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${PGPASSWORD:2005}}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -18,7 +18,8 @@ spring:
     problemdetails:
       enabled: true
 server:
-  port: 8080
+  address: 0.0.0.0
+  port: ${PORT:8080}
 management:
   endpoints:
     web:
@@ -31,9 +32,12 @@ springdoc:
     path: /v3/api-docs
 security:
   jwt:
-    secret: Ma+cOaNdrJ1ZO2uv5MZeP9vme9PvJWop2k4B4ijowso=
-    issuer: BikeLak
-    expiration: 3600
+    secret: ${JWT_SECRET:Ma+cOaNdrJ1ZO2uv5MZeP9vme9PvJWop2k4B4ijowso=}
+    issuer: ${JWT_ISSUER:BikeLab}
+    expiration: ${JWT_EXPIRATION:3600}
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}
 logging:
   level:
     org.springframework.security: DEBUG

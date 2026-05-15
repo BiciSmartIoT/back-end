@@ -1,12 +1,13 @@
 package pe.upc.ridera.bikelab.configuration;
 
 import java.util.Base64;
-import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 import java.time.Duration;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -26,6 +27,7 @@ import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
@@ -36,6 +38,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableConfigurationProperties(JwtProperties.class)
 public class SecurityConfig {
 
+    @Value("${app.cors.allowed-origins:http://localhost:3000}")
+    private String allowedOrigins;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -43,7 +48,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults()) // 👈 ESTO ES CLAVE
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/iam/auth/**", "/api/metrics/**", "/swagger-ui/**", "/v3/api-docs/**")
+                        .requestMatchers("/api/iam/auth/**", "/api/metrics/**", "/actuator/health", "/swagger-ui/**", "/v3/api-docs/**")
                         .permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
@@ -88,7 +93,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.addAllowedOrigin("http://localhost:3000");
+        config.setAllowedOriginPatterns(parseAllowedOrigins());
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.setAllowCredentials(true);
@@ -103,5 +108,12 @@ public class SecurityConfig {
         // Decodifica la cadena Base64 del .yml a bytes reales
         byte[] secretBytes = Base64.getDecoder().decode(properties.getSecret());
         return new SecretKeySpec(secretBytes, "HmacSHA256");
+    }
+
+    private List<String> parseAllowedOrigins() {
+        return Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(origin -> !origin.isBlank())
+                .toList();
     }
 }
