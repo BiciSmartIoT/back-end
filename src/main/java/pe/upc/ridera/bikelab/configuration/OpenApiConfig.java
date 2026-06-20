@@ -15,10 +15,11 @@ import org.springframework.context.annotation.Configuration;
         tags = {
                 @Tag(name = "BC: IAM", description = "Maneja usuarios, credenciales y perfiles."),
                 @Tag(name = "BC: Providing", description = "Administra el registro y soporte de proveedores."),
-                @Tag(name = "BC: Vehicles", description = "Maneja los vehículos y su disponibilidad."),
+                @Tag(name = "BC: Vehicles", description = "Maneja los vehiculos y su disponibilidad."),
                 @Tag(name = "BC: Renting", description = "Gestiona las reservas y alquileres."),
-                @Tag(name = "BC: Payments", description = "Procesa métodos de pago, cargos y pagos a proveedores."),
-                @Tag(name = "BC: Metrics", description = "Exposición pública de estadísticas agregadas.")
+                @Tag(name = "BC: Payments", description = "Procesa metodos de pago, cargos y pagos a proveedores."),
+                @Tag(name = "BC: Metrics", description = "Exposicion publica de estadisticas agregadas."),
+                @Tag(name = "BC: IoT", description = "Recibe y expone eventos reales del circuito ESP32.")
         }
 )
 public class OpenApiConfig {
@@ -29,8 +30,8 @@ public class OpenApiConfig {
     public OpenAPI api() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API de BikeLab")
-                        .description("Documentación oficial de los servicios de la plataforma BikeLab.")
+                        .title("API de BiceSmartIoT")
+                        .description("Documentacion oficial de los servicios de la plataforma BiceSmartIoT.")
                         .version("v1"))
                 .components(new Components().addSecuritySchemes(SECURITY_SCHEME_NAME,
                         new SecurityScheme()

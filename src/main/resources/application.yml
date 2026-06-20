@@ -33,11 +33,13 @@ springdoc:
 security:
   jwt:
     secret: ${JWT_SECRET:Ma+cOaNdrJ1ZO2uv5MZeP9vme9PvJWop2k4B4ijowso=}
-    issuer: ${JWT_ISSUER:BikeLab}
+    issuer: ${JWT_ISSUER:BiceSmartIoT}
     expiration: ${JWT_EXPIRATION:3600}
 app:
   cors:
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,https://front-end-1c8.pages.dev,https://*.front-end-1c8.pages.dev}
+  gateway:
+    key: ${GATEWAY_INTERNAL_KEY:dev-gateway-key}
 logging:
   level:
     org.springframework.security: DEBUG
