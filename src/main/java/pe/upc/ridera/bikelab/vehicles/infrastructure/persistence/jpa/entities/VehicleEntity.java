@@ -45,6 +45,9 @@ public class VehicleEntity {
     @Column(name = "lng", nullable = false)
     private double longitude;
 
+    @Column(name = "device_id", length = 80)
+    private String deviceId;
+
     @Column(name = "rating_avg", nullable = false)
     private BigDecimal ratingAvg;
 
@@ -61,7 +64,8 @@ public class VehicleEntity {
     }
 
     public VehicleEntity(UUID id, UUID ownerId, String status, String title, String description, BigDecimal hourlyPrice,
-            double latitude, double longitude, BigDecimal ratingAvg, Instant createdAt, Instant updatedAt) {
+            double latitude, double longitude, String deviceId, BigDecimal ratingAvg, Instant createdAt,
+            Instant updatedAt) {
         this.id = id;
         this.ownerId = ownerId;
         this.status = status;
@@ -70,6 +74,7 @@ public class VehicleEntity {
         this.hourlyPrice = hourlyPrice;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.deviceId = deviceId;
         this.ratingAvg = ratingAvg;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -105,6 +110,10 @@ public class VehicleEntity {
 
     public double getLongitude() {
         return longitude;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
     }
 
     public BigDecimal getRatingAvg() {

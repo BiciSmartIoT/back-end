@@ -25,8 +25,10 @@ public class IotDeviceEventServiceImpl implements IotDeviceEventService {
 
     @Override
     public IotDeviceEventResource register(String deviceId, IotEventType eventType, boolean blocked, String message,
-            Instant occurredAt) {
-        IotDeviceEvent event = IotDeviceEvent.create(deviceId, eventType, blocked, message, occurredAt);
+            Instant occurredAt, Double latitude, Double longitude, Double speedKmph, Boolean insideGeofence,
+            String lockState) {
+        IotDeviceEvent event = IotDeviceEvent.create(deviceId, eventType, blocked, message, occurredAt, latitude,
+                longitude, speedKmph, insideGeofence, lockState);
         return toResource(repository.save(event));
     }
 
@@ -45,6 +47,7 @@ public class IotDeviceEventServiceImpl implements IotDeviceEventService {
 
     private IotDeviceEventResource toResource(IotDeviceEvent event) {
         return new IotDeviceEventResource(event.getId(), event.getDeviceId(), event.getEventType(), event.isBlocked(),
-                event.getMessage(), event.getOccurredAt(), event.getReceivedAt());
+                event.getMessage(), event.getOccurredAt(), event.getReceivedAt(), event.getLatitude(),
+                event.getLongitude(), event.getSpeedKmph(), event.getInsideGeofence(), event.getLockState());
     }
 }

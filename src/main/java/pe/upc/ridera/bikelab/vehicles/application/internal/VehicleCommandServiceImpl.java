@@ -41,7 +41,8 @@ public class VehicleCommandServiceImpl implements VehicleCommandService {
     @Transactional
     public VehicleResource createVehicle(CreateVehicleCommand command) {
         Vehicle vehicle = Vehicle.create(null, command.ownerId(), command.title(),
-                command.description(), command.hourlyPrice(), command.latitude(), command.longitude());
+                command.description(), command.hourlyPrice(), command.latitude(), command.longitude(),
+                command.deviceId());
         Vehicle stored = vehicleRepository.save(vehicle);
         return mapper.toResource(stored);
     }
@@ -53,7 +54,7 @@ public class VehicleCommandServiceImpl implements VehicleCommandService {
         double latitude = command.latitude() != null ? command.latitude() : vehicle.getLatitude();
         double longitude = command.longitude() != null ? command.longitude() : vehicle.getLongitude();
         vehicle.updateDetails(command.requesterId(), command.title(), command.description(), command.hourlyPrice(),
-                latitude, longitude, command.desiredStatus(), command.overrideOwnership());
+                latitude, longitude, command.deviceId(), command.desiredStatus(), command.overrideOwnership());
         Vehicle saved = vehicleRepository.save(vehicle);
         return mapper.toResource(saved);
     }

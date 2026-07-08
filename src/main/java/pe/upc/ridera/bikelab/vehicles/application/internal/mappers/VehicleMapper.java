@@ -26,6 +26,7 @@ public class VehicleMapper {
                 vehicle.getHourlyPrice(),
                 vehicle.getLatitude(),
                 vehicle.getLongitude(),
+                vehicle.getDeviceId(),
                 vehicle.getRatingAvg(),
                 vehicle.getCreatedAt(),
                 vehicle.getUpdatedAt(),

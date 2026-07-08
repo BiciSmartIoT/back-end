@@ -73,7 +73,8 @@ public class VehicleRepositoryImpl implements VehicleRepository {
     private VehicleEntity toEntity(Vehicle vehicle) {
         VehicleEntity entity = new VehicleEntity(vehicle.getId(), vehicle.getOwnerId(), vehicle.getStatus().name(),
                 vehicle.getTitle(), vehicle.getDescription(), vehicle.getHourlyPrice(), vehicle.getLatitude(),
-                vehicle.getLongitude(), vehicle.getRatingAvg(), vehicle.getCreatedAt(), vehicle.getUpdatedAt());
+                vehicle.getLongitude(), vehicle.getDeviceId(), vehicle.getRatingAvg(), vehicle.getCreatedAt(),
+                vehicle.getUpdatedAt());
         List<VehicleAvailabilityEntity> availabilityEntities = vehicle.getAvailabilitySlots().stream()
                 .map(slot -> new VehicleAvailabilityEntity(slot.getId(), entity, slot.getStartAt(), slot.getEndAt()))
                 .collect(Collectors.toList());
@@ -87,6 +88,7 @@ public class VehicleRepositoryImpl implements VehicleRepository {
                 .collect(Collectors.toList());
         return Vehicle.restore(entity.getId(), entity.getOwnerId(), VehicleStatus.valueOf(entity.getStatus()),
                 entity.getTitle(), entity.getDescription(), entity.getHourlyPrice(), entity.getLatitude(),
-                entity.getLongitude(), entity.getRatingAvg(), entity.getCreatedAt(), entity.getUpdatedAt(), slots);
+                entity.getLongitude(), entity.getDeviceId(), entity.getRatingAvg(), entity.getCreatedAt(),
+                entity.getUpdatedAt(), slots);
     }
 }

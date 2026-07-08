@@ -38,11 +38,27 @@ public class IotDeviceEventEntity {
     @Column(name = "received_at", nullable = false)
     private Instant receivedAt;
 
+    @Column
+    private Double latitude;
+
+    @Column
+    private Double longitude;
+
+    @Column(name = "speed_kmph")
+    private Double speedKmph;
+
+    @Column(name = "inside_geofence")
+    private Boolean insideGeofence;
+
+    @Column(name = "lock_state", length = 40)
+    private String lockState;
+
     protected IotDeviceEventEntity() {
     }
 
     public IotDeviceEventEntity(UUID id, String deviceId, IotEventType eventType, boolean blocked, String message,
-            Instant occurredAt, Instant receivedAt) {
+            Instant occurredAt, Instant receivedAt, Double latitude, Double longitude, Double speedKmph,
+            Boolean insideGeofence, String lockState) {
         this.id = id;
         this.deviceId = deviceId;
         this.eventType = eventType;
@@ -50,15 +66,22 @@ public class IotDeviceEventEntity {
         this.message = message;
         this.occurredAt = occurredAt;
         this.receivedAt = receivedAt;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.speedKmph = speedKmph;
+        this.insideGeofence = insideGeofence;
+        this.lockState = lockState;
     }
 
     public static IotDeviceEventEntity fromAggregate(IotDeviceEvent event) {
         return new IotDeviceEventEntity(event.getId(), event.getDeviceId(), event.getEventType(), event.isBlocked(),
-                event.getMessage(), event.getOccurredAt(), event.getReceivedAt());
+                event.getMessage(), event.getOccurredAt(), event.getReceivedAt(), event.getLatitude(),
+                event.getLongitude(), event.getSpeedKmph(), event.getInsideGeofence(), event.getLockState());
     }
 
     public IotDeviceEvent toAggregate() {
-        return IotDeviceEvent.restore(id, deviceId, eventType, blocked, message, occurredAt, receivedAt);
+        return IotDeviceEvent.restore(id, deviceId, eventType, blocked, message, occurredAt, receivedAt, latitude,
+                longitude, speedKmph, insideGeofence, lockState);
     }
 
     public Instant getReceivedAt() {

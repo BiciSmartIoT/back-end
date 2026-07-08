@@ -19,6 +19,7 @@ public record VehicleResource(
         BigDecimal hourlyPrice,
         double latitude,
         double longitude,
+        String deviceId,
         BigDecimal ratingAvg,
         Instant createdAt,
         Instant updatedAt,

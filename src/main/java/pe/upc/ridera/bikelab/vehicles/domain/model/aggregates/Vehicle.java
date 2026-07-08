@@ -27,14 +27,15 @@ public class Vehicle {
     private BigDecimal hourlyPrice;
     private double latitude;
     private double longitude;
+    private String deviceId;
     private BigDecimal ratingAvg;
     private Instant createdAt;
     private Instant updatedAt;
     private final List<AvailabilitySlot> availabilitySlots;
 
     private Vehicle(UUID id, UUID ownerId, VehicleStatus status, String title, String description,
-            BigDecimal hourlyPrice, double latitude, double longitude, BigDecimal ratingAvg, Instant createdAt,
-            Instant updatedAt, List<AvailabilitySlot> availabilitySlots) {
+            BigDecimal hourlyPrice, double latitude, double longitude, String deviceId, BigDecimal ratingAvg,
+            Instant createdAt, Instant updatedAt, List<AvailabilitySlot> availabilitySlots) {
         this.id = Objects.requireNonNull(id, "id");
         this.ownerId = Objects.requireNonNull(ownerId, "ownerId");
         this.status = Objects.requireNonNull(status, "status");
@@ -43,6 +44,7 @@ public class Vehicle {
         this.hourlyPrice = Objects.requireNonNull(hourlyPrice, "hourlyPrice");
         this.latitude = latitude;
         this.longitude = longitude;
+        this.deviceId = deviceId;
         this.ratingAvg = ratingAvg == null ? BigDecimal.ZERO : ratingAvg;
         this.createdAt = createdAt == null ? Instant.now() : createdAt;
         this.updatedAt = updatedAt == null ? this.createdAt : updatedAt;
@@ -50,12 +52,12 @@ public class Vehicle {
     }
 
     public static Vehicle create(UUID id, UUID ownerId, String title, String description, BigDecimal hourlyPrice,
-            double latitude, double longitude) {
+            double latitude, double longitude, String deviceId) {
         if (hourlyPrice == null || hourlyPrice.signum() <= 0) {
             throw new VehicleDomainException("El precio por hora debe ser mayor a cero");
         }
         return new Vehicle(id == null ? UUID.randomUUID() : id, ownerId, VehicleStatus.AVAILABLE, title,
-                description, hourlyPrice, latitude, longitude, BigDecimal.ZERO, Instant.now(), Instant.now(),
+                description, hourlyPrice, latitude, longitude, deviceId, BigDecimal.ZERO, Instant.now(), Instant.now(),
                 new ArrayList<>());
     }
 
@@ -91,6 +93,10 @@ public class Vehicle {
         return longitude;
     }
 
+    public String getDeviceId() {
+        return deviceId;
+    }
+
     public BigDecimal getRatingAvg() {
         return ratingAvg;
     }
@@ -108,7 +114,7 @@ public class Vehicle {
     }
 
     public void updateDetails(UUID requesterId, String title, String description, BigDecimal hourlyPrice,
-            double latitude, double longitude, VehicleStatus desiredStatus, boolean overrideOwnership) {
+            double latitude, double longitude, String deviceId, VehicleStatus desiredStatus, boolean overrideOwnership) {
         if (!overrideOwnership) {
             ensureOwnerOrThrow(requesterId);
         }
@@ -120,6 +126,9 @@ public class Vehicle {
         this.hourlyPrice = hourlyPrice != null ? hourlyPrice : this.hourlyPrice;
         this.latitude = latitude;
         this.longitude = longitude;
+        if (deviceId != null) {
+            this.deviceId = deviceId.isBlank() ? null : deviceId;
+        }
         if (desiredStatus != null) {
             this.status = desiredStatus;
         }
@@ -200,9 +209,9 @@ public class Vehicle {
     }
 
     public static Vehicle restore(UUID id, UUID ownerId, VehicleStatus status, String title, String description,
-            BigDecimal hourlyPrice, double latitude, double longitude, BigDecimal ratingAvg, Instant createdAt,
-            Instant updatedAt, List<AvailabilitySlot> availabilitySlots) {
-        return new Vehicle(id, ownerId, status, title, description, hourlyPrice, latitude, longitude, ratingAvg,
+            BigDecimal hourlyPrice, double latitude, double longitude, String deviceId, BigDecimal ratingAvg,
+            Instant createdAt, Instant updatedAt, List<AvailabilitySlot> availabilitySlots) {
+        return new Vehicle(id, ownerId, status, title, description, hourlyPrice, latitude, longitude, deviceId, ratingAvg,
                 createdAt, updatedAt, availabilitySlots);
     }
 }

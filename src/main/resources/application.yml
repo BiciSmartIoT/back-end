@@ -42,5 +42,5 @@ app:
     key: ${GATEWAY_INTERNAL_KEY:dev-gateway-key}
 logging:
   level:
-    org.springframework.security: DEBUG
-    org.springframework.security.oauth2: DEBUG
+    org.springframework.security: INFO
+    org.springframework.security.oauth2: INFO

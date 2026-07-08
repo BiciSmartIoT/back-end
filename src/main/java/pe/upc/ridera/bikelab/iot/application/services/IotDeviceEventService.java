@@ -10,7 +10,8 @@ import pe.upc.ridera.bikelab.iot.domain.model.valueobjects.IotEventType;
 public interface IotDeviceEventService {
 
     IotDeviceEventResource register(String deviceId, IotEventType eventType, boolean blocked, String message,
-            Instant occurredAt);
+            Instant occurredAt, Double latitude, Double longitude, Double speedKmph, Boolean insideGeofence,
+            String lockState);
 
     Optional<IotDeviceEventResource> latest();
 

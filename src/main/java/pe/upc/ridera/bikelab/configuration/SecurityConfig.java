@@ -53,6 +53,12 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/iot/events")
                         .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/iot/devices/*/config")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/iot/devices/*/commands/next")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/iot/devices/*/commands/*/ack")
+                        .permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(

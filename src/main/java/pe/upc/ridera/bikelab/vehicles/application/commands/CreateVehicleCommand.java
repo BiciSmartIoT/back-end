@@ -12,5 +12,6 @@ public record CreateVehicleCommand(
         String description,
         BigDecimal hourlyPrice,
         double latitude,
-        double longitude) {
+        double longitude,
+        String deviceId) {
 }

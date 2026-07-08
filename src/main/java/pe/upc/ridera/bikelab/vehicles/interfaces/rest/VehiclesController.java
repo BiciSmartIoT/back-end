@@ -68,7 +68,7 @@ public class VehiclesController {
         UUID ownerId = currentUserUuid();
         providerApprovalService.ensureProviderApproved(ownerId);
         var command = new CreateVehicleCommand(ownerId, request.title(), request.description(), request.hourlyPrice(),
-                request.latitude(), request.longitude());
+                request.latitude(), request.longitude(), request.deviceId());
         return vehicleCommandService.createVehicle(command);
     }
 
@@ -83,7 +83,8 @@ public class VehiclesController {
             providerApprovalService.ensureProviderApproved(requesterId);
         }
         var command = new UpdateVehicleCommand(requesterId, vehicleId, request.title(), request.description(),
-                request.hourlyPrice(), request.latitude(), request.longitude(), request.desiredStatus(), overrideOwnership);
+                request.hourlyPrice(), request.latitude(), request.longitude(), request.deviceId(),
+                request.desiredStatus(), overrideOwnership);
         return vehicleCommandService.updateVehicle(command);
     }
 

@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import pe.upc.ridera.bikelab.configuration.OpenApiConfig;
+import pe.upc.ridera.bikelab.iot.application.internal.IotDeviceEdgeStateService;
 import pe.upc.ridera.bikelab.iot.application.dto.IotDeviceEventResource;
 import pe.upc.ridera.bikelab.iot.application.services.IotDeviceEventService;
 import pe.upc.ridera.bikelab.iot.interfaces.rest.resources.CreateIotDeviceEventRequest;
@@ -33,11 +34,14 @@ import pe.upc.ridera.bikelab.iot.interfaces.rest.resources.CreateIotDeviceEventR
 public class IotDeviceEventsController {
 
     private final IotDeviceEventService service;
+    private final IotDeviceEdgeStateService edgeStateService;
     private final String gatewayKey;
 
     public IotDeviceEventsController(IotDeviceEventService service,
+            IotDeviceEdgeStateService edgeStateService,
             @Value("${app.gateway.key:dev-gateway-key}") String gatewayKey) {
         this.service = service;
+        this.edgeStateService = edgeStateService;
         this.gatewayKey = gatewayKey;
     }
 
@@ -48,8 +52,11 @@ public class IotDeviceEventsController {
             @RequestHeader(name = "X-Gateway-Key", required = false) String providedGatewayKey,
             @Valid @RequestBody CreateIotDeviceEventRequest request) {
         ensureGatewayKey(providedGatewayKey);
-        return service.register(request.deviceId(), request.eventType(), request.blocked(), request.message(),
-                request.occurredAt());
+        IotDeviceEventResource event = service.register(request.deviceId(), request.eventType(), request.blocked(),
+                request.message(), request.occurredAt(), request.latitude(), request.longitude(), request.speedKmph(),
+                request.insideGeofence(), request.lockState());
+        edgeStateService.recordEvent(request);
+        return event;
     }
 
     @Operation(summary = "Obtener el evento IoT mas reciente")

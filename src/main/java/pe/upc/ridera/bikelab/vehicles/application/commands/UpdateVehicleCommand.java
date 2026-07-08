@@ -16,6 +16,7 @@ public record UpdateVehicleCommand(
         BigDecimal hourlyPrice,
         Double latitude,
         Double longitude,
+        String deviceId,
         VehicleStatus desiredStatus,
         boolean overrideOwnership) {
 }

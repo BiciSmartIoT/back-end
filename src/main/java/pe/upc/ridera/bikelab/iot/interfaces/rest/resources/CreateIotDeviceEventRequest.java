@@ -12,5 +12,10 @@ public record CreateIotDeviceEventRequest(
         @NotNull IotEventType eventType,
         boolean blocked,
         @NotBlank @Size(max = 255) String message,
-        Instant occurredAt) {
+        Instant occurredAt,
+        Double latitude,
+        Double longitude,
+        Double speedKmph,
+        Boolean insideGeofence,
+        String lockState) {
 }
